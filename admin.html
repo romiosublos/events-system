@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>Admin Dashboard</h1>
+</div>
+
+<div class="card">
+<h3>Add Event</h3>
+
+<input id="name" placeholder="Event name">
+<input id="date" type="date">
+<input id="meeting" placeholder="Meeting link">
+<input id="attendance" placeholder="Attendance link">
+<input id="media" placeholder="Media link">
+
+<button class="primary" onclick="add()">Add Event</button>
+</div>
+
+<div id="list"></div>
+
+</div>
+
+<script src="app.js"></script>
+<script>
+function add(){
+  const e = {
+    id: Date.now(),
+    name: name.value,
+    date: date.value,
+    meeting: meeting.value,
+    attendance: attendance.value,
+    media: media.value
+  };
+
+  if(!e.name || !e.date){
+    alert("Name + Date required");
+    return;
+  }
+
+  events.push(e);
+  save();
+  render();
+}
+
+function del(id){
+  events = events.filter(e => e.id !== id);
+  save();
+  render();
+}
+
+function render(){
+  const box = document.getElementById("list");
+  box.innerHTML = "";
+
+  events.sort((a,b)=> new Date(a.date)-new Date(b.date));
+
+  events.forEach(e=>{
+    box.innerHTML += `
+      <div class="card">
+        <h3>${e.name}</h3>
+        <div>📅 ${e.date}</div>
+
+        <button class="danger" onclick="del(${e.id})">Delete</button>
+      </div>
+    `;
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
