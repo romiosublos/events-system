@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8" />
-<title>ALGHAD NURSERIES - EVENTS</title>
+<meta charset="UTF-8">
+<title>Events Dashboard</title>
 
 <style>
-:root{
-  --primary:#0f4c81;
-  --meeting:#0078d4;
-  --attendance:#28a745;
-  --media:#6f42c1;
-  --bg:#eef3f8;
-}
-
 body{
   margin:0;
-  font-family:Segoe UI, Arial;
-  background:var(--bg);
+  font-family:Segoe UI;
+  background:#eef3f8;
   direction:rtl;
-  text-align:right;
 }
 
 .container{
@@ -28,13 +19,150 @@ body{
 }
 
 .header{
-  background:var(--primary);
-  color:white;
-  padding:25px;
-  border-radius:12px;
+  background:#0f4c81;
+  color:#fff;
+  padding:20px;
+  border-radius:10px;
   text-align:center;
 }
 
+.box{
+  background:#fff;
+  padding:15px;
+  margin-top:15px;
+  border-radius:10px;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+}
+
+button{
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.save{background:#0f4c81;color:#fff;width:100%;}
+.delete{background:#dc3545;color:#fff;margin-top:5px;}
+
+.event{
+  background:#fff;
+  margin-top:10px;
+  padding:10px;
+  border-radius:8px;
+}
+
+.links a{
+  display:inline-block;
+  margin:5px;
+  padding:6px 10px;
+  color:#fff;
+  border-radius:5px;
+  text-decoration:none;
+}
+
+.meeting{background:#0078d4;}
+.attendance{background:#28a745;}
+.media{background:#6f42c1;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>لوحة تحكم الأحداث</h1>
+</div>
+
+<!-- ADD EVENT -->
+<div class="box">
+<h3>إضافة حدث جديد</h3>
+
+<input id="name" placeholder="اسم الحدث">
+<input id="date" type="date">
+<input id="meeting" placeholder="رابط الاجتماع">
+<input id="attendance" placeholder="رابط الحضور">
+<input id="media" placeholder="رابط الوسائط">
+
+<button class="save" onclick="addEvent()">حفظ الحدث</button>
+</div>
+
+<!-- EVENTS LIST -->
+<div class="box">
+<h3>الأحداث</h3>
+<div id="events"></div>
+</div>
+
+</div>
+
+<script>
+let events = JSON.parse(localStorage.getItem("events") || "[]");
+
+function save(){
+  localStorage.setItem("events", JSON.stringify(events));
+}
+
+function addEvent(){
+  const e = {
+    id: Date.now(),
+    name: document.getElementById("name").value,
+    date: document.getElementById("date").value,
+    meeting: document.getElementById("meeting").value,
+    attendance: document.getElementById("attendance").value,
+    media: document.getElementById("media").value
+  };
+
+  if(!e.name || !e.date){
+    alert("اسم الحدث والتاريخ مطلوب");
+    return;
+  }
+
+  events.push(e);
+  save();
+  render();
+}
+
+function deleteEvent(id){
+  events = events.filter(e => e.id !== id);
+  save();
+  render();
+}
+
+function render(){
+  const container = document.getElementById("events");
+  container.innerHTML = "";
+
+  events.sort((a,b)=> new Date(a.date)-new Date(b.date));
+
+  events.forEach(e=>{
+    container.innerHTML += `
+      <div class="event">
+        <h3>${e.name}</h3>
+        <div>📅 ${e.date}</div>
+
+        <div class="links">
+          ${e.meeting ? `<a class="meeting" href="${e.meeting}" target="_blank">اجتماع</a>` : ""}
+          ${e.attendance ? `<a class="attendance" href="${e.attendance}" target="_blank">حضور</a>` : ""}
+          ${e.media ? `<a class="media" href="${e.media}" target="_blank">ملفات</a>` : ""}
+        </div>
+
+        <button class="delete" onclick="deleteEvent(${e.id})">حذف</button>
+      </div>
+    `;
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
 .filter{
   margin-top:20px;
   background:#fff;
