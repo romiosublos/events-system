@@ -2,74 +2,8 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Events Dashboard</title>
-
-<style>
-body{
-  margin:0;
-  font-family:Segoe UI;
-  background:#eef3f8;
-  direction:rtl;
-}
-
-.container{
-  max-width:1000px;
-  margin:auto;
-  padding:20px;
-}
-
-.header{
-  background:#0f4c81;
-  color:#fff;
-  padding:20px;
-  border-radius:10px;
-  text-align:center;
-}
-
-.box{
-  background:#fff;
-  padding:15px;
-  margin-top:15px;
-  border-radius:10px;
-}
-
-input{
-  width:100%;
-  padding:10px;
-  margin-top:8px;
-}
-
-button{
-  padding:10px;
-  margin-top:10px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.save{background:#0f4c81;color:#fff;width:100%;}
-.delete{background:#dc3545;color:#fff;margin-top:5px;}
-
-.event{
-  background:#fff;
-  margin-top:10px;
-  padding:10px;
-  border-radius:8px;
-}
-
-.links a{
-  display:inline-block;
-  margin:5px;
-  padding:6px 10px;
-  color:#fff;
-  border-radius:5px;
-  text-decoration:none;
-}
-
-.meeting{background:#0078d4;}
-.attendance{background:#28a745;}
-.media{background:#6f42c1;}
-</style>
+<title>Events</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -77,233 +11,40 @@ button{
 <div class="container">
 
 <div class="header">
-<h1>لوحة تحكم الأحداث</h1>
+<h1>AL GHadeer Nurseries</h1>
+<h2>Events</h2>
 </div>
 
-<!-- ADD EVENT -->
-<div class="box">
-<h3>إضافة حدث جديد</h3>
-
-<input id="name" placeholder="اسم الحدث">
-<input id="date" type="date">
-<input id="meeting" placeholder="رابط الاجتماع">
-<input id="attendance" placeholder="رابط الحضور">
-<input id="media" placeholder="رابط الوسائط">
-
-<button class="save" onclick="addEvent()">حفظ الحدث</button>
-</div>
-
-<!-- EVENTS LIST -->
-<div class="box">
-<h3>الأحداث</h3>
-<div id="events"></div>
-</div>
+<div id="list"></div>
 
 </div>
 
+<script src="app.js"></script>
 <script>
-let events = JSON.parse(localStorage.getItem("events") || "[]");
-
-function save(){
-  localStorage.setItem("events", JSON.stringify(events));
-}
-
-function addEvent(){
-  const e = {
-    id: Date.now(),
-    name: document.getElementById("name").value,
-    date: document.getElementById("date").value,
-    meeting: document.getElementById("meeting").value,
-    attendance: document.getElementById("attendance").value,
-    media: document.getElementById("media").value
-  };
-
-  if(!e.name || !e.date){
-    alert("اسم الحدث والتاريخ مطلوب");
-    return;
-  }
-
-  events.push(e);
-  save();
-  render();
-}
-
-function deleteEvent(id){
-  events = events.filter(e => e.id !== id);
-  save();
-  render();
-}
-
 function render(){
-  const container = document.getElementById("events");
-  container.innerHTML = "";
+  const box = document.getElementById("list");
+  box.innerHTML = "";
 
   events.sort((a,b)=> new Date(a.date)-new Date(b.date));
 
   events.forEach(e=>{
-    container.innerHTML += `
-      <div class="event">
+    box.innerHTML += `
+      <div class="card">
         <h3>${e.name}</h3>
         <div>📅 ${e.date}</div>
 
         <div class="links">
-          ${e.meeting ? `<a class="meeting" href="${e.meeting}" target="_blank">اجتماع</a>` : ""}
-          ${e.attendance ? `<a class="attendance" href="${e.attendance}" target="_blank">حضور</a>` : ""}
-          ${e.media ? `<a class="media" href="${e.media}" target="_blank">ملفات</a>` : ""}
+          ${e.meeting ? `<a class="meeting" href="${e.meeting}" target="_blank">Meeting</a>` : ""}
+          ${e.attendance ? `<a class="attendance" href="${e.attendance}" target="_blank">Attendance</a>` : ""}
+          ${e.media ? `<a class="media" href="${e.media}" target="_blank">Media</a>` : ""}
         </div>
-
-        <button class="delete" onclick="deleteEvent(${e.id})">حذف</button>
       </div>
     `;
   });
 }
 
 render();
-</script>
-
-</body>
-</html>
-.filter{
-  margin-top:20px;
-  background:#fff;
-  padding:15px;
-  border-radius:10px;
-}
-
-select{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-}
-
-.event{
-  background:#fff;
-  margin-top:20px;
-  padding:20px;
-  border-radius:12px;
-}
-
-.links a{
-  display:inline-block;
-  margin:5px;
-  padding:8px 12px;
-  color:white;
-  border-radius:6px;
-  text-decoration:none;
-}
-
-.meeting{background:var(--meeting);}
-.attendance{background:var(--attendance);}
-.media{background:var(--media);}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<div class="header">
-  <h1>ALGHAD NURSERIES</h1>
-  <h2>BANI YAS 1</h2>
-</div>
-
-<div class="filter">
-  <label>📅 Filter by date:</label>
-  <select id="dateFilter" onchange="renderEvents()">
-    <option value="">All Dates</option>
-  </select>
-</div>
-
-<div id="events"></div>
-
-</div>
-
-<script>
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbWMWEEgqyxzQipau5PqypYk5TQrIw2ghkLl_HGtrcZFPB9fPCzZ7UPSk1YrflTZHruRSWpwg92_zv/pub?output=csv";
-
-let allEvents = [];
-
-const el = id => document.getElementById(id);
-
-/* FETCH CSV */
-async function loadEvents(){
-  try{
-    const res = await fetch(SHEET_URL);
-    const text = await res.text();
-
-    allEvents = parseCSV(text);
-
-    loadDates();
-    renderEvents();
-
-  } catch(err){
-    console.error("Load error:", err);
-  }
-}
-
-/* SAFE CSV PARSER (handles Arabic + long links) */
-function parseCSV(text){
-  const lines = text.trim().split("\n");
-
-  return lines.slice(1).map(line => {
-    const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-
-    return {
-      name: (cols[0] || "").replace(/"/g,"").trim(),
-      date: (cols[1] || "").replace(/"/g,"").trim(),
-      meeting: (cols[2] || "").replace(/"/g,"").trim(),
-      attendance: (cols[3] || "").replace(/"/g,"").trim(),
-      media: (cols[4] || "").replace(/"/g,"").trim()
-    };
-  });
-}
-
-/* FILTER DATES */
-function loadDates(){
-  const select = el("dateFilter");
-
-  const dates = [...new Set(allEvents.map(e=>e.date))]
-    .filter(Boolean)
-    .sort();
-
-  select.innerHTML = `<option value="">All Dates</option>`;
-
-  dates.forEach(d=>{
-    select.innerHTML += `<option value="${d}">${d}</option>`;
-  });
-}
-
-/* RENDER EVENTS */
-function renderEvents(){
-  const container = el("events");
-  container.innerHTML = "";
-
-  let events = [...allEvents];
-
-  const filter = el("dateFilter").value;
-  if(filter){
-    events = events.filter(e => e.date === filter);
-  }
-
-  events.forEach(e=>{
-    container.innerHTML += `
-      <div class="event">
-        <h3>${e.name}</h3>
-        <div>📅 ${e.date}</div>
-
-        <div class="links">
-          ${e.meeting ? `<a class="meeting" href="${e.meeting}" target="_blank">🎥 Meeting</a>` : ""}
-          ${e.attendance ? `<a class="attendance" href="${e.attendance}" target="_blank">📝 Attendance</a>` : ""}
-          ${e.media ? `<a class="media" href="${e.media}" target="_blank">📁 Media</a>` : ""}
-        </div>
-      </div>
-    `;
-  });
-}
-
-/* INIT */
-loadEvents();
-setInterval(loadEvents, 60000);
+setInterval(render,2000);
 </script>
 
 </body>
