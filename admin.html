@@ -23,7 +23,7 @@
 <input id="attendance" placeholder="Attendance link">
 <input id="media" placeholder="Media link">
 
-<button class="primary" onclick="add()">Add Event</button>
+<button class="primary" onclick="addEvent()">Add Event</button>
 </div>
 
 <div id="list"></div>
@@ -31,15 +31,23 @@
 </div>
 
 <script src="app.js"></script>
+
 <script>
-function add(){
+function addEvent(){
+
+  const nameEl = document.getElementById("name");
+  const dateEl = document.getElementById("date");
+  const meetingEl = document.getElementById("meeting");
+  const attendanceEl = document.getElementById("attendance");
+  const mediaEl = document.getElementById("media");
+
   const e = {
     id: Date.now(),
-    name: name.value,
-    date: date.value,
-    meeting: meeting.value,
-    attendance: attendance.value,
-    media: media.value
+    name: nameEl.value.trim(),
+    date: dateEl.value,
+    meeting: meetingEl.value.trim(),
+    attendance: attendanceEl.value.trim(),
+    media: mediaEl.value.trim()
   };
 
   if(!e.name || !e.date){
@@ -50,9 +58,16 @@ function add(){
   events.push(e);
   save();
   render();
+
+  // clear inputs
+  nameEl.value = "";
+  dateEl.value = "";
+  meetingEl.value = "";
+  attendanceEl.value = "";
+  mediaEl.value = "";
 }
 
-function del(id){
+function deleteEvent(id){
   events = events.filter(e => e.id !== id);
   save();
   render();
@@ -70,7 +85,7 @@ function render(){
         <h3>${e.name}</h3>
         <div>📅 ${e.date}</div>
 
-        <button class="danger" onclick="del(${e.id})">Delete</button>
+        <button class="danger" onclick="deleteEvent(${e.id})">Delete</button>
       </div>
     `;
   });
