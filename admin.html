@@ -1,98 +1,79 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<title>Admin Dashboard</title>
-<link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<div class="container">
-
-<div class="header">
-<h1>Admin Dashboard</h1>
-</div>
-
-<div class="card">
-<h3>Add Event</h3>
-
-<input id="name" placeholder="Event name">
-<input id="date" type="date">
-<input id="meeting" placeholder="Meeting link">
-<input id="attendance" placeholder="Attendance link">
-<input id="media" placeholder="Media link">
-
-<button class="primary" onclick="addEvent()">Add Event</button>
-</div>
-
-<div id="list"></div>
-
-</div>
-
-<script src="app.js"></script>
-
 <script>
-function addEvent(){
+document.addEventListener("DOMContentLoaded", function () {
 
-  const nameEl = document.getElementById("name");
-  const dateEl = document.getElementById("date");
-  const meetingEl = document.getElementById("meeting");
-  const attendanceEl = document.getElementById("attendance");
-  const mediaEl = document.getElementById("media");
+  let events = JSON.parse(localStorage.getItem("events") || "[]");
 
-  const e = {
-    id: Date.now(),
-    name: nameEl.value.trim(),
-    date: dateEl.value,
-    meeting: meetingEl.value.trim(),
-    attendance: attendanceEl.value.trim(),
-    media: mediaEl.value.trim()
-  };
-
-  if(!e.name || !e.date){
-    alert("Name + Date required");
-    return;
+  function save(){
+    localStorage.setItem("events", JSON.stringify(events));
   }
 
-  events.push(e);
-  save();
+  function addEvent(){
+
+    const nameEl = document.getElementById("name");
+    const dateEl = document.getElementById("date");
+    const meetingEl = document.getElementById("meeting");
+    const attendanceEl = document.getElementById("attendance");
+    const mediaEl = document.getElementById("media");
+
+    const name = nameEl.value.trim();
+    const date = dateEl.value;
+
+    console.log("DEBUG NAME:", name);
+    console.log("DEBUG DATE:", date);
+
+    if(!name || !date){
+      alert("Name + Date required");
+      return;
+    }
+
+    events.push({
+      id: Date.now(),
+      name,
+      date,
+      meeting: meetingEl.value.trim(),
+      attendance: attendanceEl.value.trim(),
+      media: mediaEl.value.trim()
+    });
+
+    save();
+    render();
+
+    nameEl.value = "";
+    dateEl.value = "";
+    meetingEl.value = "";
+    attendanceEl.value = "";
+    mediaEl.value = "";
+  }
+
+  function deleteEvent(id){
+    events = events.filter(e => e.id !== id);
+    save();
+    render();
+  }
+
+  function render(){
+    const box = document.getElementById("list");
+    box.innerHTML = "";
+
+    events.sort((a,b)=> new Date(a.date)-new Date(b.date));
+
+    events.forEach(e=>{
+      box.innerHTML += `
+        <div class="card">
+          <h3>${e.name}</h3>
+          <div>📅 ${e.date}</div>
+
+          <button class="danger" onclick="window.deleteEvent(${e.id})">Delete</button>
+        </div>
+      `;
+    });
+  }
+
+  // expose globally for onclick
+  window.addEvent = addEvent;
+  window.deleteEvent = deleteEvent;
+
   render();
 
-  // clear inputs
-  nameEl.value = "";
-  dateEl.value = "";
-  meetingEl.value = "";
-  attendanceEl.value = "";
-  mediaEl.value = "";
-}
-
-function deleteEvent(id){
-  events = events.filter(e => e.id !== id);
-  save();
-  render();
-}
-
-function render(){
-  const box = document.getElementById("list");
-  box.innerHTML = "";
-
-  events.sort((a,b)=> new Date(a.date)-new Date(b.date));
-
-  events.forEach(e=>{
-    box.innerHTML += `
-      <div class="card">
-        <h3>${e.name}</h3>
-        <div>📅 ${e.date}</div>
-
-        <button class="danger" onclick="deleteEvent(${e.id})">Delete</button>
-      </div>
-    `;
-  });
-}
-
-render();
+});
 </script>
-
-</body>
-</html>
