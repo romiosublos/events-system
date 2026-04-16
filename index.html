@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
 <meta charset="UTF-8" />
-<title>ALGHAD NURSERIES - BANI YAS 1</title>
+<title>ALGHAD NURSERIES - EVENTS</title>
 
 <style>
 :root{
@@ -91,50 +91,43 @@ select{
 </div>
 
 <script>
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbWMWEEgqyxzQipau5PqypYk5TQrIw2ghkLl_HGtrcZFPB9fPCzZ7UPSk1YrflTZHruRSWpwg92_zv/pubhtml";
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbWMWEEgqyxzQipau5PqypYk5TQrIw2ghkLl_HGtrcZFPB9fPCzZ7UPSk1YrflTZHruRSWpwg92_zv/pub?output=csv";
 
 let allEvents = [];
 
 const el = id => document.getElementById(id);
 
-/* FETCH HTML SHEET */
+/* FETCH CSV */
 async function loadEvents(){
   try{
     const res = await fetch(SHEET_URL);
-    const html = await res.text();
+    const text = await res.text();
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-
-    const rows = doc.querySelectorAll("table tr");
-
-    let data = [];
-
-    rows.forEach((row, index) => {
-      const cols = row.querySelectorAll("td,th");
-
-      // skip header row
-      if(index === 0) return;
-
-      if(cols.length >= 5){
-        data.push({
-          name: cols[0].innerText.trim(),
-          date: cols[1].innerText.trim(),
-          meeting: cols[2].innerText.trim(),
-          attendance: cols[3].innerText.trim(),
-          media: cols[4].innerText.trim()
-        });
-      }
-    });
-
-    allEvents = data;
+    allEvents = parseCSV(text);
 
     loadDates();
     renderEvents();
 
-  }catch(err){
-    console.error("Error loading sheet:", err);
+  } catch(err){
+    console.error("Load error:", err);
   }
+}
+
+/* SAFE CSV PARSER (handles Arabic + long links) */
+function parseCSV(text){
+  const lines = text.trim().split("\n");
+
+  return lines.slice(1).map(line => {
+    const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+
+    return {
+      name: (cols[0] || "").replace(/"/g,"").trim(),
+      date: (cols[1] || "").replace(/"/g,"").trim(),
+      meeting: (cols[2] || "").replace(/"/g,"").trim(),
+      attendance: (cols[3] || "").replace(/"/g,"").trim(),
+      media: (cols[4] || "").replace(/"/g,"").trim()
+    };
+  });
 }
 
 /* FILTER DATES */
@@ -152,7 +145,7 @@ function loadDates(){
   });
 }
 
-/* RENDER */
+/* RENDER EVENTS */
 function renderEvents(){
   const container = el("events");
   container.innerHTML = "";
@@ -180,6 +173,7 @@ function renderEvents(){
   });
 }
 
+/* INIT */
 loadEvents();
 setInterval(loadEvents, 60000);
 </script>
