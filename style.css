@@ -1,0 +1,61 @@
+body{
+  margin:0;
+  font-family:Segoe UI, Arial;
+  background:#f4f6f9;
+  direction:rtl;
+}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
+
+.header{
+  background:linear-gradient(135deg,#0f4c81,#1e6fb8);
+  color:white;
+  padding:25px;
+  border-radius:12px;
+  text-align:center;
+  box-shadow:0 6px 15px rgba(0,0,0,0.1);
+}
+
+.card{
+  background:#fff;
+  margin-top:15px;
+  padding:15px;
+  border-radius:12px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+
+button{
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.primary{background:#0f4c81;color:#fff;width:100%;}
+.danger{background:#dc3545;color:#fff;}
+
+.links a{
+  display:inline-block;
+  margin:5px;
+  padding:8px 12px;
+  border-radius:6px;
+  color:#fff;
+  text-decoration:none;
+}
+
+.meeting{background:#0078d4;}
+.attendance{background:#28a745;}
+.media{background:#6f42c1;}
