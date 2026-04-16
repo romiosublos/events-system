@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ALGHAD NURSERIES - BANI YAS 1</title>
+
+<style>
+:root{
+  --primary:#0f4c81;
+  --meeting:#0078d4;
+  --attendance:#28a745;
+  --media:#6f42c1;
+  --bg:#eef3f8;
+}
+
+body{
+  margin:0;
+  font-family:Segoe UI, Arial;
+  background:var(--bg);
+  direction:rtl;
+  text-align:right;
+}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
+
+.header{
+  background:var(--primary);
+  color:white;
+  padding:25px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.filter{
+  margin-top:20px;
+  background:#fff;
+  padding:15px;
+  border-radius:10px;
+}
+
+select{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+}
+
+.event{
+  background:#fff;
+  margin-top:20px;
+  padding:20px;
+  border-radius:12px;
+}
+
+.links a{
+  display:inline-block;
+  margin:5px;
+  padding:8px 12px;
+  color:white;
+  border-radius:6px;
+  text-decoration:none;
+}
+
+.meeting{background:var(--meeting);}
+.attendance{background:var(--attendance);}
+.media{background:var(--media);}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>ALGHAD NURSERIES</h1>
+  <h2>BANI YAS 1</h2>
+</div>
+
+<div class="filter">
+  <label>📅 Filter by date:</label>
+  <select id="dateFilter" onchange="renderEvents()">
+    <option value="">All Dates</option>
+  </select>
+</div>
+
+<div id="events"></div>
+
+</div>
+
+<script>
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbWMWEEgqyxzQipau5PqypYk5TQrIw2ghkLl_HGtrcZFPB9fPCzZ7UPSk1YrflTZHruRSWpwg92_zv/pubhtml";
+
+let allEvents = [];
+
+const el = id => document.getElementById(id);
+
+/* FETCH HTML SHEET */
+async function loadEvents(){
+  try{
+    const res = await fetch(SHEET_URL);
+    const html = await res.text();
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const rows = doc.querySelectorAll("table tr");
+
+    let data = [];
+
+    rows.forEach((row, index) => {
+      const cols = row.querySelectorAll("td,th");
+
+      // skip header row
+      if(index === 0) return;
+
+      if(cols.length >= 5){
+        data.push({
+          name: cols[0].innerText.trim(),
+          date: cols[1].innerText.trim(),
+          meeting: cols[2].innerText.trim(),
+          attendance: cols[3].innerText.trim(),
+          media: cols[4].innerText.trim()
+        });
+      }
+    });
+
+    allEvents = data;
+
+    loadDates();
+    renderEvents();
+
+  }catch(err){
+    console.error("Error loading sheet:", err);
+  }
+}
+
+/* FILTER DATES */
+function loadDates(){
+  const select = el("dateFilter");
+
+  const dates = [...new Set(allEvents.map(e=>e.date))]
+    .filter(Boolean)
+    .sort();
+
+  select.innerHTML = `<option value="">All Dates</option>`;
+
+  dates.forEach(d=>{
+    select.innerHTML += `<option value="${d}">${d}</option>`;
+  });
+}
+
+/* RENDER */
+function renderEvents(){
+  const container = el("events");
+  container.innerHTML = "";
+
+  let events = [...allEvents];
+
+  const filter = el("dateFilter").value;
+  if(filter){
+    events = events.filter(e => e.date === filter);
+  }
+
+  events.forEach(e=>{
+    container.innerHTML += `
+      <div class="event">
+        <h3>${e.name}</h3>
+        <div>📅 ${e.date}</div>
+
+        <div class="links">
+          ${e.meeting ? `<a class="meeting" href="${e.meeting}" target="_blank">🎥 Meeting</a>` : ""}
+          ${e.attendance ? `<a class="attendance" href="${e.attendance}" target="_blank">📝 Attendance</a>` : ""}
+          ${e.media ? `<a class="media" href="${e.media}" target="_blank">📁 Media</a>` : ""}
+        </div>
+      </div>
+    `;
+  });
+}
+
+loadEvents();
+setInterval(loadEvents, 60000);
+</script>
+
+</body>
+</html>
