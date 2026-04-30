@@ -1,0 +1,33 @@
+body{
+  margin:0;
+  font-family:Segoe UI;
+  background:linear-gradient(135deg,#eef2ff,#fce4ec);
+  direction:rtl;
+}
+
+.header{
+  background:#1e88e5;
+  color:white;
+  padding:30px;
+  text-align:center;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+.event{
+  background:white;
+  margin:15px 0;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  animation:fade 0.5s ease;
+}
+
+@keyframes fade{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
