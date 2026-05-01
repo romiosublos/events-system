@@ -2,9 +2,8 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Alghad Nursery</title>
+<title>Events</title>
 
-<!-- Firebase v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -16,49 +15,14 @@
 
 <header class="header">
   <h1>🌟 حضانة الغد</h1>
-
-  <button onclick="document.getElementById('loginBox').style.display='block'">
-    Admin Login
-  </button>
-
-  <button onclick="logout()" id="logoutBtn" style="display:none;">
-    Logout
-  </button>
 </header>
 
 <div class="container">
-
-<!-- LOGIN -->
-<div id="loginBox" class="modal" style="display:none;">
-  <h3>Admin Login</h3>
-
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-
-  <button onclick="login()">Login</button>
-  <button onclick="document.getElementById('loginBox').style.display='none'">Close</button>
-</div>
-
-<!-- ADMIN PANEL -->
-<div id="adminPanel" class="card" style="display:none;">
-  <h3>➕ Add / Edit Event</h3>
-
-  <input id="name" placeholder="Event name (required)">
-  <input id="date" type="date">
-
-  <input id="image" placeholder="Image URL (optional)">
-  <input id="meeting" placeholder="Meeting link (required)">
-  <input id="attendance" placeholder="Attendance link (required)">
-  <input id="media" placeholder="Media link (required)">
-
-  <button onclick="saveEvent()">Save Event</button>
-</div>
-
-<!-- EVENTS -->
-<div id="events"></div>
-
+  <div id="events"></div>
 </div>
 
 <script src="script.js"></script>
+<script>loadPublicEvents();</script>
+
 </body>
 </html>
