@@ -5,19 +5,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-let events = [];
-
-// GET events
-app.get("/events", (req,res)=>{
-  res.json(events);
+// simple test route
+app.get("/", (req, res) => {
+  res.send("Server is running 🚀");
 });
 
-// ADD event
-app.post("/events", (req,res)=>{
-  events.push(req.body);
-  res.json({message:"added"});
-});
-
-app.listen(3000, ()=>{
-  console.log("Server running");
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
 });
