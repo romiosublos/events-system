@@ -3,16 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <title>ALGHAD NURSERY</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div class="header">
   <h1>🌟 حضانة الغد</h1>
+  <p>BANIYAS 1</p>
 </div>
 
 <div class="container">
-  <div id="events"></div>
+
+<!-- hidden admin panel -->
+<div id="adminPanel" class="admin" style="display:none;">
+  <h3>إضافة حدث</h3>
+
+  <input id="name" placeholder="اسم الحدث">
+  <input id="date" type="date">
+  <input id="image" placeholder="رابط الصورة">
+  <input id="meeting" placeholder="رابط الاجتماع">
+  <input id="attendance" placeholder="رابط الحضور">
+  <input id="media" placeholder="رابط الفيديو">
+
+  <button onclick="addEvent()">➕ إضافة</button>
+</div>
+
+<div id="events"></div>
+
 </div>
 
 <script src="script.js"></script>
