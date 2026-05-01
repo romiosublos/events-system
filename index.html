@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Alghad Nursery</title>
 
-<!-- Firebase -->
+<!-- Firebase v8 CDN (IMPORTANT) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -16,23 +16,36 @@
 
 <div class="header">
   <h1>🌟 حضانة الغد</h1>
-  <button onclick="openLogin()">Admin Login</button>
+  <button onclick="document.getElementById('loginBox').style.display='block'">
+    Admin Login
+  </button>
 </div>
 
 <div class="container">
 
+<!-- LOGIN BOX -->
+<div id="loginBox" class="loginBox" style="display:none;">
+  <h3>Admin Login</h3>
+
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+
+  <button onclick="login()">Login</button>
+  <button onclick="document.getElementById('loginBox').style.display='none'">Close</button>
+</div>
+
 <!-- ADMIN PANEL -->
 <div id="adminPanel" class="admin" style="display:none;">
-  <h3>➕ إضافة حدث</h3>
+  <h3>➕ Add Event</h3>
 
-  <input id="name" placeholder="اسم الحدث">
+  <input id="name" placeholder="Event name">
   <input id="date" type="date">
-  <input id="image" placeholder="رابط الصورة">
-  <input id="meeting" placeholder="رابط الاجتماع">
-  <input id="attendance" placeholder="رابط الحضور">
-  <input id="media" placeholder="رابط الفيديو">
+  <input id="image" placeholder="Image URL">
+  <input id="meeting" placeholder="Meeting link">
+  <input id="attendance" placeholder="Attendance link">
+  <input id="media" placeholder="Media link">
 
-  <button onclick="addEvent()">إضافة</button>
+  <button onclick="addEvent()">Add Event</button>
 </div>
 
 <!-- EVENTS -->
