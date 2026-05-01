@@ -1,15 +1,23 @@
 body{
   margin:0;
-  font-family:Segoe UI;
-  background:linear-gradient(135deg,#eef2ff,#fce4ec);
+  font-family:Arial;
+  background:#f4f6f9;
   direction:rtl;
 }
 
 .header{
-  background:linear-gradient(135deg,#0f4c81,#1e88e5);
+  background:#1976d2;
   color:white;
+  padding:20px;
   text-align:center;
-  padding:30px;
+}
+
+.header button{
+  margin-top:10px;
+  padding:8px 15px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
 }
 
 .container{
@@ -21,34 +29,33 @@ body{
 .admin{
   background:white;
   padding:15px;
-  border-radius:15px;
+  border-radius:10px;
   margin-bottom:20px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 input{
   width:100%;
   padding:10px;
-  margin:6px 0;
-  border-radius:10px;
+  margin:5px 0;
+  border-radius:6px;
   border:1px solid #ccc;
 }
 
 button{
   padding:10px;
-  background:#1e88e5;
+  background:#1976d2;
   color:white;
   border:none;
-  border-radius:10px;
+  border-radius:8px;
   cursor:pointer;
 }
 
 .event{
   background:white;
   margin:15px 0;
-  border-radius:15px;
+  border-radius:10px;
   overflow:hidden;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
 .event img{
@@ -58,13 +65,13 @@ button{
 }
 
 .event-content{
-  padding:15px;
+  padding:10px;
 }
 
 .links a{
   display:inline-block;
   margin:5px;
-  padding:8px 12px;
+  padding:6px 10px;
   border-radius:20px;
   color:white;
   text-decoration:none;
@@ -76,10 +83,9 @@ button{
 
 .delete{
   background:red;
-  color:white;
   border:none;
+  color:white;
   padding:6px 10px;
-  border-radius:8px;
-  margin-top:10px;
+  border-radius:6px;
   cursor:pointer;
 }
