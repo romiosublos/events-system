@@ -1,28 +1,36 @@
-// 🔥 Firebase config (PUT YOUR OWN)
+// 🔥 Firebase Config (YOUR REAL PROJECT)
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_DB.firebaseio.com"
+  apiKey: "AIzaSyC6GsAITxmH0uSYBV474lA4U14g2UtwB3A",
+  authDomain: "alghad-nursery.firebaseapp.com",
+  databaseURL: "https://alghad-nursery-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "alghad-nursery"
 };
 
+// INIT FIREBASE
 firebase.initializeApp(firebaseConfig);
 
-const db = firebase.database();
 const auth = firebase.auth();
+const db = firebase.database();
 
 
-// 🔐 ADMIN LOGIN
-function openLogin(){
-  const email = prompt("Email");
-  const pass = prompt("Password");
+// 🔐 LOGIN
+function login(){
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-  auth.signInWithEmailAndPassword(email, pass)
-    .catch(err => alert(err.message));
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      alert("Login success ✅");
+      document.getElementById("loginBox").style.display = "none";
+    })
+    .catch(err => {
+      alert(err.code + "\n" + err.message);
+    });
 }
 
 
 // 👀 SHOW ADMIN PANEL
-auth.onAuthStateChanged(user=>{
+auth.onAuthStateChanged(user => {
   document.getElementById("adminPanel").style.display = user ? "block" : "none";
 });
 
@@ -38,25 +46,19 @@ function addEvent(){
     media: document.getElementById("media").value || ""
   });
 
-  alert("Event added");
-}
-
-
-// 🗑 DELETE EVENT
-function deleteEvent(id){
-  db.ref("events/" + id).remove();
+  alert("Event added ✅");
 }
 
 
 // 📡 LOAD EVENTS
-db.ref("events").on("value", snap=>{
+db.ref("events").on("value", snap => {
   const data = snap.val() || {};
   const box = document.getElementById("events");
+
   box.innerHTML = "";
 
-  Object.keys(data).reverse().forEach(id=>{
+  Object.keys(data).reverse().forEach(id => {
     const e = data[id];
-    const isAdmin = auth.currentUser;
 
     box.innerHTML += `
       <div class="event">
@@ -71,8 +73,6 @@ db.ref("events").on("value", snap=>{
             ${e.attendance ? `<a class="attendance" href="${e.attendance}" target="_blank">حضور</a>` : ""}
             ${e.media ? `<a class="media" href="${e.media}" target="_blank">فيديو</a>` : ""}
           </div>
-
-          ${isAdmin ? `<button class="delete" onclick="deleteEvent('${id}')">حذف</button>` : ""}
         </div>
       </div>
     `;
