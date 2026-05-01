@@ -1,4 +1,4 @@
-// 🔥 Firebase Config (YOUR REAL PROJECT)
+// 🔥 Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyC6GsAITxmH0uSYBV474lA4U14g2UtwB3A",
   authDomain: "alghad-nursery.firebaseapp.com",
@@ -6,59 +6,127 @@ const firebaseConfig = {
   projectId: "alghad-nursery"
 };
 
-// INIT FIREBASE
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.database();
 
+let editId = null;
 
+//
 // 🔐 LOGIN
+//
 function login(){
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      alert("Login success ✅");
-      document.getElementById("loginBox").style.display = "none";
+    .then(()=>{
+      alert("Login success");
+      document.getElementById("loginBox").style.display="none";
     })
-    .catch(err => {
-      alert(err.code + "\n" + err.message);
-    });
+    .catch(err=>alert(err.message));
 }
 
+//
+// 🚪 LOGOUT
+//
+function logout(){
+  auth.signOut();
+}
 
-// 👀 SHOW ADMIN PANEL
-auth.onAuthStateChanged(user => {
+//
+// 👀 AUTH STATE
+//
+auth.onAuthStateChanged(user=>{
   document.getElementById("adminPanel").style.display = user ? "block" : "none";
+  document.getElementById("logoutBtn").style.display = user ? "inline-block" : "none";
 });
 
+//
+// ➕ SAVE (ADD / EDIT)
+//
+function saveEvent(){
 
-// ➕ ADD EVENT
-function addEvent(){
-  db.ref("events").push({
-    name: document.getElementById("name").value,
-    date: document.getElementById("date").value,
-    image: document.getElementById("image").value || "",
-    meeting: document.getElementById("meeting").value || "",
-    attendance: document.getElementById("attendance").value || "",
-    media: document.getElementById("media").value || ""
-  });
+  const name = document.getElementById("name").value;
+  const date = document.getElementById("date").value;
+  const image = document.getElementById("image").value;
 
-  alert("Event added ✅");
+  const meeting = document.getElementById("meeting").value;
+  const attendance = document.getElementById("attendance").value;
+  const media = document.getElementById("media").value;
+
+  // ✅ VALIDATION
+  if(!name || !date || !meeting || !attendance || !media){
+    alert("Please fill all required fields");
+    return;
+  }
+
+  const data = {
+    name,
+    date,
+    image: image || "",
+    meeting,
+    attendance,
+    media
+  };
+
+  if(editId){
+    db.ref("events/"+editId).update(data);
+    editId = null;
+    alert("Updated ✅");
+  }else{
+    db.ref("events").push(data);
+    alert("Added ✅");
+  }
+
+  clearForm();
 }
 
+//
+// 🧹 CLEAR FORM
+//
+function clearForm(){
+  document.querySelectorAll("input").forEach(i=>i.value="");
+}
 
+//
+// 🗑 DELETE
+//
+function deleteEvent(id){
+  if(confirm("Delete event?")){
+    db.ref("events/"+id).remove();
+  }
+}
+
+//
+// ✏️ EDIT
+//
+function editEvent(id, data){
+  editId = id;
+
+  document.getElementById("name").value = data.name;
+  document.getElementById("date").value = data.date;
+  document.getElementById("image").value = data.image || "";
+  document.getElementById("meeting").value = data.meeting;
+  document.getElementById("attendance").value = data.attendance;
+  document.getElementById("media").value = data.media;
+
+  window.scrollTo(0,0);
+}
+
+//
 // 📡 LOAD EVENTS
-db.ref("events").on("value", snap => {
+//
+db.ref("events").on("value", snap=>{
   const data = snap.val() || {};
   const box = document.getElementById("events");
 
   box.innerHTML = "";
 
-  Object.keys(data).reverse().forEach(id => {
+  Object.keys(data).reverse().forEach(id=>{
     const e = data[id];
+    const isAdmin = auth.currentUser;
 
     box.innerHTML += `
       <div class="event">
@@ -69,10 +137,15 @@ db.ref("events").on("value", snap => {
           <p>📅 ${e.date}</p>
 
           <div class="links">
-            ${e.meeting ? `<a class="meeting" href="${e.meeting}" target="_blank">اجتماع</a>` : ""}
-            ${e.attendance ? `<a class="attendance" href="${e.attendance}" target="_blank">حضور</a>` : ""}
-            ${e.media ? `<a class="media" href="${e.media}" target="_blank">فيديو</a>` : ""}
+            <a class="meeting" href="${e.meeting}" target="_blank">اجتماع</a>
+            <a class="attendance" href="${e.attendance}" target="_blank">حضور</a>
+            <a class="media" href="${e.media}" target="_blank">فيديو</a>
           </div>
+
+          ${isAdmin ? `
+            <button onclick='editEvent("${id}", ${JSON.stringify(e)})'>✏️ Edit</button>
+            <button onclick='deleteEvent("${id}")'>🗑 Delete</button>
+          ` : ""}
         </div>
       </div>
     `;
