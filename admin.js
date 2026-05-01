@@ -10,6 +10,16 @@ const auth = firebase.auth();
 const db = firebase.database();
 
 let editId = null;
+let currentUser = null;
+
+// Monitor authentication state
+auth.onAuthStateChanged(user => {
+  currentUser = user;
+  if (!user) {
+    loginBox.style.display = "block";
+    adminPanel.style.display = "none";
+  }
+});
 
 //
 // LOGIN
@@ -35,6 +45,11 @@ function logout(){
 // SAVE / EDIT
 //
 function addEvent(){
+  // ✅ CHECK IF USER IS LOGGED IN
+  if (!currentUser) {
+    alert("You must be logged in to add events");
+    return;
+  }
 
   if(!name.value || !date.value || !meeting.value || !attendance.value || !media.value){
     alert("Fill required fields");
@@ -68,13 +83,27 @@ function clear(){
 // DELETE
 //
 function deleteEvent(id){
-  db.ref("events/"+id).remove();
+  // ✅ CHECK IF USER IS LOGGED IN BEFORE DELETING
+  if (!currentUser) {
+    alert("You must be logged in to delete events");
+    return;
+  }
+  
+  if (confirm("Are you sure you want to delete this event?")) {
+    db.ref("events/"+id).remove();
+  }
 }
 
 //
 // EDIT
 //
 function editEvent(id,data){
+  // ✅ CHECK IF USER IS LOGGED IN BEFORE EDITING
+  if (!currentUser) {
+    alert("You must be logged in to edit events");
+    return;
+  }
+  
   editId=id;
 
   name.value=data.name;
