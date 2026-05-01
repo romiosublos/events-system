@@ -1,29 +1,27 @@
-// 🔥 Firebase Config (YOUR PROJECT)
+// 🔥 Firebase config (PUT YOUR OWN)
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
-  authDomain: "alghad-nursery.firebaseapp.com",
-  databaseURL: "https://alghad-nursery-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "alghad-nursery"
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_DB.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const db = firebase.database();
 const auth = firebase.auth();
 
 
-// 🔐 SECRET ADMIN LOGIN (CTRL + SHIFT + A)
-document.addEventListener("keydown", (e)=>{
-  if(e.ctrlKey && e.shiftKey && e.key === "A"){
-    const email = prompt("Admin Email");
-    const pass = prompt("Password");
+// 🔐 ADMIN LOGIN
+function openLogin(){
+  const email = prompt("Email");
+  const pass = prompt("Password");
 
-    auth.signInWithEmailAndPassword(email, pass)
-      .catch(err => alert(err.message));
-  }
-});
+  auth.signInWithEmailAndPassword(email, pass)
+    .catch(err => alert(err.message));
+}
 
 
-// 🚪 AUTH STATE
+// 👀 SHOW ADMIN PANEL
 auth.onAuthStateChanged(user=>{
   document.getElementById("adminPanel").style.display = user ? "block" : "none";
 });
@@ -32,19 +30,19 @@ auth.onAuthStateChanged(user=>{
 // ➕ ADD EVENT
 function addEvent(){
   db.ref("events").push({
-    name: name.value,
-    date: date.value,
-    image: image.value,
-    meeting: meeting.value,
-    attendance: attendance.value,
-    media: media.value
+    name: document.getElementById("name").value,
+    date: document.getElementById("date").value,
+    image: document.getElementById("image").value || "",
+    meeting: document.getElementById("meeting").value || "",
+    attendance: document.getElementById("attendance").value || "",
+    media: document.getElementById("media").value || ""
   });
 
-  alert("Event Added!");
+  alert("Event added");
 }
 
 
-// 🗑 DELETE
+// 🗑 DELETE EVENT
 function deleteEvent(id){
   db.ref("events/" + id).remove();
 }
