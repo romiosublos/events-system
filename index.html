@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Alghad Nursery</title>
 
-<!-- Firebase v8 CDN (IMPORTANT) -->
+<!-- Firebase v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -14,17 +14,22 @@
 
 <body>
 
-<div class="header">
+<header class="header">
   <h1>🌟 حضانة الغد</h1>
+
   <button onclick="document.getElementById('loginBox').style.display='block'">
     Admin Login
   </button>
-</div>
+
+  <button onclick="logout()" id="logoutBtn" style="display:none;">
+    Logout
+  </button>
+</header>
 
 <div class="container">
 
-<!-- LOGIN BOX -->
-<div id="loginBox" class="loginBox" style="display:none;">
+<!-- LOGIN -->
+<div id="loginBox" class="modal" style="display:none;">
   <h3>Admin Login</h3>
 
   <input id="email" placeholder="Email">
@@ -35,17 +40,18 @@
 </div>
 
 <!-- ADMIN PANEL -->
-<div id="adminPanel" class="admin" style="display:none;">
-  <h3>➕ Add Event</h3>
+<div id="adminPanel" class="card" style="display:none;">
+  <h3>➕ Add / Edit Event</h3>
 
-  <input id="name" placeholder="Event name">
+  <input id="name" placeholder="Event name (required)">
   <input id="date" type="date">
-  <input id="image" placeholder="Image URL">
-  <input id="meeting" placeholder="Meeting link">
-  <input id="attendance" placeholder="Attendance link">
-  <input id="media" placeholder="Media link">
 
-  <button onclick="addEvent()">Add Event</button>
+  <input id="image" placeholder="Image URL (optional)">
+  <input id="meeting" placeholder="Meeting link (required)">
+  <input id="attendance" placeholder="Attendance link (required)">
+  <input id="media" placeholder="Media link (required)">
+
+  <button onclick="saveEvent()">Save Event</button>
 </div>
 
 <!-- EVENTS -->
