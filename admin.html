@@ -2,6 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel</title>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -15,39 +16,38 @@
 
 <header class="header">
   <h1>🔐 Admin Dashboard</h1>
-
   <button onclick="logout()">Logout</button>
 </header>
 
 <div class="container">
 
-<!-- LOGIN -->
-<div id="loginBox">
+<div id="loginBox" class="card">
   <input id="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
   <button onclick="login()">Login</button>
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="adminPanel" style="display:none;">
+<div id="adminPanel" style="display:none;" class="card">
+
   <h3>Add Event</h3>
 
-  <input id="name" placeholder="Name">
+  <input id="name" placeholder="Event name">
   <input id="date" type="date">
-  <input id="image" placeholder="Image">
-  <input id="meeting" placeholder="Meeting">
-  <input id="attendance" placeholder="Attendance">
-  <input id="media" placeholder="Media">
 
-  <button onclick="saveEvent()">Save</button>
+  <input id="image" placeholder="Image URL (optional)">
+  <input id="meeting" placeholder="Meeting link">
+  <input id="attendance" placeholder="Attendance link">
+  <input id="media" placeholder="Media link">
 
-  <div id="events"></div>
-</div>
+  <button onclick="addEvent()">Save</button>
 
 </div>
 
-<script src="script.js"></script>
-<script>loadAdmin();</script>
+<div id="events"></div>
+
+</div>
+
+<script src="admin.js"></script>
 
 </body>
 </html>
