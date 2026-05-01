@@ -1,75 +1,61 @@
 body{
   margin:0;
   font-family:Arial;
-  background:linear-gradient(135deg,#eef2ff,#fce4ec);
+  background:#f4f7ff;
   direction:rtl;
 }
 
+/* HEADER */
 .header{
   background:linear-gradient(135deg,#1e3a8a,#2563eb);
   color:white;
   padding:20px;
   text-align:center;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
 }
 
+/* CONTAINER */
 .container{
   max-width:900px;
   margin:auto;
-  padding:20px;
+  padding:15px;
 }
 
-/* MODAL */
-.modal{
-  position:fixed;
-  top:20%;
-  left:50%;
-  transform:translateX(-50%);
+/* CARD */
+.card{
   background:white;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.3);
-  width:300px;
+  padding:15px;
+  border-radius:12px;
+  margin:10px 0;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
 }
 
+/* INPUT */
 input{
   width:100%;
   padding:10px;
-  margin:5px 0;
+  margin:6px 0;
   border-radius:8px;
-  border:1px solid #ccc;
+  border:1px solid #ddd;
 }
 
-/* BUTTONS */
+/* BUTTON */
 button{
   background:#2563eb;
   color:white;
   border:none;
   padding:10px;
-  margin:5px;
   border-radius:8px;
   cursor:pointer;
-  transition:0.2s;
+  margin:5px 0;
 }
 
-button:hover{
-  transform:scale(1.05);
-}
-
-/* EVENT CARD */
+/* EVENT */
 .event{
   background:white;
   margin:15px 0;
-  border-radius:15px;
+  border-radius:12px;
   overflow:hidden;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
-  transition:0.3s;
-}
-
-.event:hover{
-  transform:translateY(-5px);
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 .event img{
@@ -79,7 +65,7 @@ button:hover{
 }
 
 .event-content{
-  padding:15px;
+  padding:12px;
 }
 
 .links a{
@@ -93,4 +79,9 @@ button:hover{
 
 .meeting{background:#2196f3;}
 .attendance{background:#4caf50;}
-.media{background:#9c27b0;}
+.media{background:#9c27b0}
+
+/* MOBILE */
+@media(max-width:600px){
+  .header h1{font-size:18px;}
+}
