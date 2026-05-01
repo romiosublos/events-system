@@ -2,12 +2,12 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>ALGHAD NURSERY</title>
+<title>Alghad Nursery</title>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <link rel="stylesheet" href="style.css">
 </head>
@@ -16,14 +16,14 @@
 
 <div class="header">
   <h1>🌟 حضانة الغد</h1>
-  <p>BANIYAS 1</p>
+  <button onclick="openLogin()">Admin Login</button>
 </div>
 
 <div class="container">
 
-<!-- hidden admin panel -->
+<!-- ADMIN PANEL -->
 <div id="adminPanel" class="admin" style="display:none;">
-  <h3>إضافة حدث</h3>
+  <h3>➕ إضافة حدث</h3>
 
   <input id="name" placeholder="اسم الحدث">
   <input id="date" type="date">
@@ -32,9 +32,10 @@
   <input id="attendance" placeholder="رابط الحضور">
   <input id="media" placeholder="رابط الفيديو">
 
-  <button onclick="addEvent()">➕ إضافة</button>
+  <button onclick="addEvent()">إضافة</button>
 </div>
 
+<!-- EVENTS -->
 <div id="events"></div>
 
 </div>
